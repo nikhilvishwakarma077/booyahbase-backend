@@ -10,15 +10,16 @@ import organizerRoutes from "./routes/organizer.routes.js";
 import scrimRoutes from "./routes/scrim.routes.js";
 import { notFound } from "./middlewares/notFound.middleware.js";
 import { errorHandler } from "./middlewares/error.middleware.js";
+import { publicApiLimiter } from "./middlewares/rateLimit.middleware.js";
 
-const app = express()
+const app = express() 
 
 app.use(express.json());
 app.use(cookieParser());
 
 app.use(cors({
-  origin:process.env.CLIENT_URL,
-  // origin:"http://localhost:5173",
+  // origin:process.env.CLIENT_URL,
+  origin:"http://localhost:5173",
   credentials: true
 }));
 connectDB();
@@ -30,8 +31,8 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/admin", adminRoutes);
-app.use("/api/organizers", organizerRoutes);
-app.use("/api/scrims", scrimRoutes);
+app.use("/api/organizers",publicApiLimiter, organizerRoutes);
+app.use("/api/scrims",publicApiLimiter, scrimRoutes);
 
 app.use(notFound);
 app.use(errorHandler); 

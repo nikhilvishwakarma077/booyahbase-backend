@@ -7,10 +7,11 @@ import {
 import { protect } from "../middlewares/auth.middleware.js";
 import { validate } from "../middlewares/validate.middleware.js";
 import { loginAdminValidation } from "../validations/admin.validation.js";
+import { adminLoginLimiter } from "../middlewares/rateLimit.middleware.js";
 
 const router = Router();
 
-router.post("/login", validate(loginAdminValidation), loginAdmin);
+router.post("/login",adminLoginLimiter, validate(loginAdminValidation), loginAdmin);
 
 router.post("/logout", protect, logoutAdmin);
 

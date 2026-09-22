@@ -16,11 +16,13 @@ import {
     updateOrganizerValidation,
     organizerIdValidation,
 } from "../validations/organizer.validation.js";
+import { adminLimiter } from "../middlewares/rateLimit.middleware.js";
 
 const router = Router();
 
 router.post(
     "/",
+    adminLimiter,
     protect,
     validate(createOrganizerValidation),
     createOrganizer
@@ -36,6 +38,7 @@ router.get(
 
 router.put(
     "/:id",
+    adminLimiter,
     protect,
     validate(organizerIdValidation, "params"),
     validate(updateOrganizerValidation),
@@ -44,6 +47,7 @@ router.put(
 
 router.delete(
     "/:id",
+    adminLimiter,
     protect,
     validate(organizerIdValidation, "params"),
     deleteOrganizer

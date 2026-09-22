@@ -17,11 +17,13 @@ import {
 } from "../validations/scrim.validation.js";
 
 import { validate } from "../middlewares/validate.middleware.js";
+import { adminLimiter } from "../middlewares/rateLimit.middleware.js";
 
 const router = Router();
 
 router.post(
     "/",
+    adminLimiter,
     protect,
     validate(createScrimValidation),
     createScrim
@@ -37,6 +39,7 @@ router.get(
 
 router.put(
     "/:id",
+    adminLimiter,
     protect,
     validate(scrimIdValidation, "params"),
     validate(updateScrimValidation),
@@ -45,6 +48,7 @@ router.put(
 
 router.delete(
     "/:id",
+    adminLimiter,
     protect,
     validate(scrimIdValidation, "params"),
     deleteScrim
